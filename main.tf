@@ -791,21 +791,61 @@ resource "null_resource" "copy_delete_gluster" {
   }
 }
 
+#VM IPs
+locals {
+    #IP Addresses
+  nfs_ips = "${flatten(nutanix_virtual_machine.nfs.*.nic_list.0.ip_endpoint_list)}"
+  master_ips = "${flatten(nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list)}"
+  proxy_ips = "${flatten(nutanix_virtual_machine.proxy.*.nic_list.0.ip_endpoint_list)}"
+  mgmt_ips = "${flatten(nutanix_virtual_machine.management.*.nic_list.0.ip_endpoint_list)}"
+  va_ips = "${flatten(nutanix_virtual_machine.va.*.nic_list.0.ip_endpoint_list)}"
+  worker_ips = "${flatten(nutanix_virtual_machine.worker.*.nic_list.0.ip_endpoint_list)}"
+  gluster_ips = "${flatten(nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list)}"
+}
+
+data "template_file" "nfs_ips" {
+  count = "${var.nfs["nodes"]}"
+  template = "${lookup(local.nfs_ips[count.index],"ip")}"
+}
+data "template_file" "master_ips" {
+  count = "${var.master["nodes"]}"
+  template = "${lookup(local.master_ips[count.index],"ip")}"
+}
+data "template_file" "proxy_ips" {
+  count = "${var.proxy["nodes"]}"
+  template = "${lookup(local.proxy_ips[count.index],"ip")}"
+}
+data "template_file" "mgmt_ips" {
+  count = "${var.management["nodes"]}"
+  template = "${lookup(local.mgmt_ips[count.index],"ip")}"
+}
+data "template_file" "va_ips" {
+  count = "${var.va["nodes"]}"
+  template = "${lookup(local.va_ips[count.index],"ip")}"
+}
+data "template_file" "worker_ips" {
+  count = "${var.worker["nodes"]}"
+  template = "${lookup(local.worker_ips[count.index],"ip")}"
+}
+data "template_file" "gluster_ips" {
+  count = "${var.gluster["nodes"]}"
+  template = "${lookup(local.gluster_ips[count.index],"ip")}"
+}
 //spawn ICP Installation
 module "icpprovision" {
   source = "github.com/pjgunadi/terraform-module-icp-deploy?ref=test"
 
   //Connection IPs
-  icp-ips = "${concat(nutanix_virtual_machine.nfs.*.ip_address)}"
+  icp-ips = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
 
-  boot-node = "${element(nutanix_virtual_machine.nfs.*.ip_address, 0)}"
+  boot-node = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
 
   //Configuration IPs
-  icp-master     = ["${nutanix_virtual_machine.master.*.ip_address}"]
-  icp-worker     = ["${nutanix_virtual_machine.worker.*.ip_address}"]
-  icp-proxy      = ["${split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.ip_address) : join(",",nutanix_virtual_machine.proxy.*.ip_address))}"]
-  icp-management = ["${split(",",var.management["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.management.*.ip_address))}"]
-  icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.va.*.ip_address))}"]
+  icp-master     = ["${data.template_file.master_ips.*.rendered}"]
+  icp-worker     = ["${data.template_file.worker_ips.*.rendered}"]
+  icp-proxy      = ["${split(",",var.proxy["nodes"] == 0 ? join(",",data.template_file.master_ips.*.rendered) : join(",",data.template_file.proxy_ips.*.rendered))}"]
+  icp-management = ["${split(",",var.management["nodes"] == 0 ? "" : join(",",data.template_file.mgmt_ips.*.rendered))}"]
+  icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",data.template_file.va_ips.*.rendered))}"]
 
   # Workaround for terraform issue #10857
   cluster_size    = "${var.nfs["nodes"]}"
@@ -833,9 +873,9 @@ module "icpprovision" {
     "docker_log_max_size"          = "100m"
     "docker_log_max_file"          = "10"
     #"disabled_management_services" = ["${split(",",var.va["nodes"] != 0 ? join(",",var.disable_management) : join(",",concat(list("vulnerability-advisor"),var.disable_management)))}"]
-    "cluster_vip"                  = "${var.cluster_vip == "" ? element(nutanix_virtual_machine.master.*.ip_address, 0) : var.cluster_vip}"
+    "cluster_vip"                  = "${var.cluster_vip == "" ? nutanix_virtual_machine.master.0.nic_list.0.ip_endpoint_list.0.ip : var.cluster_vip}"
     "vip_iface"                    = "${var.cluster_vip_iface == "" ? "eth0" : var.cluster_vip_iface}"
-    "proxy_vip"                    = "${var.proxy_vip == "" ? element(split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.ip_address) : join(",",nutanix_virtual_machine.proxy.*.ip_address)), 0) : var.proxy_vip}"
+    "proxy_vip"                    = "${var.proxy_vip == "" ? element(split(",",var.proxy["nodes"] == 0 ? join(",",data.template_file.master_ips.*.rendered) : join(",",data.template_file.proxy_ips.*.rendered)), 0) : var.proxy_vip}"
     "proxy_vip_iface"              = "${var.proxy_vip_iface == "" ? "eth0" : var.proxy_vip_iface}"
 
     "management_services" = {
@@ -852,8 +892,8 @@ module "icpprovision" {
   install_gluster = "${var.install_gluster}"
 
   gluster_size        = "${var.gluster["nodes"]}"
-  gluster_ips         = ["${nutanix_virtual_machine.gluster.*.ip_address}"] #Connecting IP
-  gluster_svc_ips     = ["${nutanix_virtual_machine.gluster.*.ip_address}"] #Service IP
+  gluster_ips         = ["${data.template_file.gluster_ips.*.rendered}"] #Connecting IP
+  gluster_svc_ips     = ["${data.template_file.gluster_ips.*.rendered}"] #Service IP
   device_name         = "/dev/sdb"                                                  #update according to the device name provided by cloud provider
   heketi_ip           = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Connectiong IP
   heketi_svc_ip       = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Service IP
