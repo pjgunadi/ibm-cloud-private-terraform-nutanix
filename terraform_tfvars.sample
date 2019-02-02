@@ -1,6 +1,6 @@
 nutanix_user="<nutanix-login-user>"
 nutanix_password="<nutanix-login-password>"
-nutanix_server="<nutanix-server-ipaddress>"
+nutanix_endpoint="<nutanix-endpoint-ipaddress>"
 nutanix_port=9440
 nutanix_cluster_uuid="<nutanix-datacenter-uuid>"
 nutanix_image_uuid="<nutanix-image-uuid>"
