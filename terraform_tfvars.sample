@@ -1,0 +1,105 @@
+nutanix_user="<nutanix-login-user>"
+nutanix_password="<nutanix-login-password>"
+nutanix_server="<nutanix-server-ipaddress>"
+nutanix_port=9440
+nutanix_cluster_uuid="<nutanix-datacenter-uuid>"
+nutanix_image_uuid="<nutanix-image-uuid>"
+nutanix_network_uuid="<nutanix-network-uuid>"
+
+ssh_user="ubuntu"                               #Login user in selected template
+ssh_password="your-password"                    #Login password in selected template
+timezone = "Asia/Singapore"                     #OS Time Zone
+vm_private_key_file="nutanix-key"               #Private Key Filename to be saved on local
+icp_version="3.1.1-ee"                          #ICP Version #Community: 2.1.0.3 #Enterprise: 2.1.0.3-ee , ibmcom/icp-inception-amd64:3.1.0-ee
+#icp_source_server="x.x.x.x"                    #SFTP Server for Enterprise Edition
+#icp_source_user="ftp-user"                     #SFTP Login user
+#icp_source_password="ftp-password"             #SFTP Login password
+#icp_source_path="path-to-icp-enterprise-file"  #Download file location in SFTP server
+#cluster_vip="x.x.x.x"                          #ICP Cluster Virtual IP for HA Deployment (Enterprise edition)
+cluster_vip_iface="ens160"                      #ICP Cluster Virtual IP Interface name for HA. #Ubuntu: ens160 #RHEL: ens192 #Default: eth0
+#proxy_vip="192.168.66.94"                      #ICP Proxy Virtual IP for HA Deployment (Enterprise edition)
+proxy_vip_iface="ens160"                        #ICP Proxy Virtual IP Interface name for HA. #Ubuntu: ens160 #RHEL: ens192 #Default: eth0
+cluster_name="mycluster"                        #ICP Cluster Name
+instance_prefix="icp"                           #VM Instance name prefix
+install_gluster=true                            #Option to install GlusterFS
+gluster_volume_type = "none"                    #Gluster Volume Type. Sample: none, replicate:3, disperse:4:2
+heketi_admin_pwd = "your-password"              #Heketi API admin password
+disable_management = ["istio", "custom-metrics-adapter"] #Default Disabled management component v2.1.0.3
+management_services = {             #Default Disabled management component v3.1.0
+  istio = "enabled"
+  vulnerability-advisor = "enabled"
+  storage-glusterfs = "disabled"
+  storage-minio = "disabled"
+}
+master= {                                       #VM Specification for ICP Master node
+    nodes       = "1"
+    name        = "master"
+    cpu_cores   = "4"
+    cpu_sockets = "2"
+    os_disk     = "100"
+    kubelet_lv  = "10"                          #Kubelet Volume size
+    docker_lv   = "100"                         #Docker Volume size
+    etcd_lv     = "10"                           #Etcd Volume size
+    registry_lv = "25"                          #Registry Volume size
+    management_lv = "100"                       #Management Volume size
+    memory      = "16384"
+}
+proxy = {
+    nodes       = "1"
+    name        = "proxy"
+    cpu_cores   = "2"
+    cpu_sockets = "1"
+    os_disk     = "100"
+    kubelet_lv  = "10"
+    docker_lv   = "100"
+    memory      = "4096"  
+}
+management = {
+    nodes       = "1"
+    name        = "mgmt"
+    cpu_cores   = "4"
+    cpu_sockets = "2"
+    os_disk     = "100"
+    kubelet_lv  = "10"
+    docker_lv   = "100"
+    management_lv = "100"                       #Management Volume size
+    memory      = "16384"
+}  
+va = {
+    nodes       = "1"
+    name        = "va"
+    cpu_cores   = "4"
+    cpu_sockets = "2"
+    os_disk     = "100"
+    kubelet_lv  = "10"
+    docker_lv   = "100"
+    va_lv       = "100"                       #Management Volume size
+    memory      = "16384"
+}
+worker = {
+    nodes       = "3"
+    name        = "worker"
+    cpu_cores   = "4"
+    cpu_sockets = "2"
+    os_disk     = "100"
+    kubelet_lv  = "10"
+    docker_lv   = "100"
+    memory      = "16384"
+}
+gluster= {
+    nodes       = "3"
+    name        = "gluster"
+    cpu_cores   = "2"
+    cpu_sockets = "1"
+    os_disk     = "100"
+    data_disk   = "100" // GB                               #Data disk for Gluster
+    memory      = "2048"
+}
+nfs= {
+    nodes       = "1"
+    name        = "nfs"
+    cpu_cores   = "2"
+    cpu_sockets = "1"
+    os_disk     = "300"
+    memory      = "4096"
+}
