@@ -836,7 +836,7 @@ module "icpprovision" {
   source = "github.com/pjgunadi/terraform-module-icp-deploy?ref=test"
 
   //Connection IPs
-  icp-ips = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
+  icp-ips = ["${data.template_file.nfs_ips.*.rendered}"]
 
   boot-node = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
 
