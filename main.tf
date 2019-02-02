@@ -796,16 +796,16 @@ module "icpprovision" {
   source = "github.com/pjgunadi/terraform-module-icp-deploy?ref=test"
 
   //Connection IPs
-  icp-ips = "${concat(nutanix_virtual_machine.nfs.*.nic_list.0.ip_endpoint_list)}"
+  icp-ips = "${concat(nutanix_virtual_machine.nfs.*.nic_list.0.ip_endpoint_list.0.ip)}"
 
-  boot-node = "${element(nutanix_virtual_machine.nfs.*.nic_list.0.ip_endpoint_list, 0)}"
+  boot-node = "${element(nutanix_virtual_machine.nfs.*.nic_list.0.ip_endpoint_list.0.ip, 0)}"
 
   //Configuration IPs
-  icp-master     = ["${nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list}"]
-  icp-worker     = ["${nutanix_virtual_machine.worker.*.nic_list.0.ip_endpoint_list}"]
-  icp-proxy      = ["${split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list) : join(",",nutanix_virtual_machine.proxy.*.nic_list.0.ip_endpoint_list))}"]
-  icp-management = ["${split(",",var.management["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.management.*.nic_list.0.ip_endpoint_list))}"]
-  icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.va.*.nic_list.0.ip_endpoint_list))}"]
+  icp-master     = ["${nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list.0.ip}"]
+  icp-worker     = ["${nutanix_virtual_machine.worker.*.nic_list.0.ip_endpoint_list.0.ip}"]
+  icp-proxy      = ["${split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list.0.ip) : join(",",nutanix_virtual_machine.proxy.*.nic_list.0.ip_endpoint_list.0.ip))}"]
+  icp-management = ["${split(",",var.management["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.management.*.nic_list.0.ip_endpoint_list.0.ip))}"]
+  icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.va.*.nic_list.0.ip_endpoint_list.0.ip))}"]
 
   # Workaround for terraform issue #10857
   cluster_size    = "${var.nfs["nodes"]}"
@@ -833,9 +833,9 @@ module "icpprovision" {
     "docker_log_max_size"          = "100m"
     "docker_log_max_file"          = "10"
     #"disabled_management_services" = ["${split(",",var.va["nodes"] != 0 ? join(",",var.disable_management) : join(",",concat(list("vulnerability-advisor"),var.disable_management)))}"]
-    "cluster_vip"                  = "${var.cluster_vip == "" ? element(nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list, 0) : var.cluster_vip}"
+    "cluster_vip"                  = "${var.cluster_vip == "" ? element(nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list.0.ip, 0) : var.cluster_vip}"
     "vip_iface"                    = "${var.cluster_vip_iface == "" ? "eth0" : var.cluster_vip_iface}"
-    "proxy_vip"                    = "${var.proxy_vip == "" ? element(split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list) : join(",",nutanix_virtual_machine.proxy.*.nic_list.0.ip_endpoint_list)), 0) : var.proxy_vip}"
+    "proxy_vip"                    = "${var.proxy_vip == "" ? element(split(",",var.proxy["nodes"] == 0 ? join(",",nutanix_virtual_machine.master.*.nic_list.0.ip_endpoint_list.0.ip) : join(",",nutanix_virtual_machine.proxy.*.nic_list.0.ip_endpoint_list.0.ip)), 0) : var.proxy_vip}"
     "proxy_vip_iface"              = "${var.proxy_vip_iface == "" ? "eth0" : var.proxy_vip_iface}"
 
     "management_services" = {
@@ -852,8 +852,8 @@ module "icpprovision" {
   install_gluster = "${var.install_gluster}"
 
   gluster_size        = "${var.gluster["nodes"]}"
-  gluster_ips         = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list}"] #Connecting IP
-  gluster_svc_ips     = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list}"] #Service IP
+  gluster_ips         = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list.0.ip}"] #Connecting IP
+  gluster_svc_ips     = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list.0.ip}"] #Service IP
   device_name         = "/dev/sdb"                                                  #update according to the device name provided by cloud provider
   heketi_ip           = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Connectiong IP
   heketi_svc_ip       = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Service IP
