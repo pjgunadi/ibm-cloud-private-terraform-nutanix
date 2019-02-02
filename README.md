@@ -1,4 +1,4 @@
-# Terraform Template for ICP Deployment in VMware
+# Terraform Template for ICP Deployment in Nutanix
 
 ## Before you start
 Install your Nutanix cluster environment
