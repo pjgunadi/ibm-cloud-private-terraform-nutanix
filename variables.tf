@@ -1,17 +1,17 @@
-variable nutanix_user {
+variable "nutanix_user" {
   description = "Nutanix user"
 }
-variable nutanix_password {
+variable "nutanix_password" {
   description = "Nutanix password"
 }
-variable nutanix_endpoint {
+variable "nutanix_endpoint" {
   description = "Nutanix endpoint"
 }
-variable nutanix_port {
+variable "nutanix_port" {
   description = "Nutanix port"
   default = 9440
 }
-variable nutanix_cluster_uuid {
+variable "nutanix_cluster_uuid" {
   description = "Nutanix Cluster UUID"
 }
 variable "nutanix_image_uuid" {
@@ -21,20 +21,20 @@ variable "nutanix_network_uuid" {
   description = "The UUID of the network to be used for deploy operations."
 }
 
-variable ssh_user {
+variable "ssh_user" {
   description = "VM Username"
 }
 
-variable ssh_password {
+variable "ssh_password" {
   description = "VM Password"
 }
 
-variable timezone {
+variable "timezone" {
   description = "Time Zone"
   default     = "Asia/Singapore"
 }
 
-variable vm_private_key_file {
+variable "vm_private_key_file" {
   default = "nutanix-key"
 }
 
@@ -44,19 +44,19 @@ variable "icp_version" {
   default     = "3.1.1"
 }
 
-variable icp_source_server {
+variable "icp_source_server" {
   default = ""
 }
 
-variable icp_source_user {
+variable "icp_source_user" {
   default = ""
 }
 
-variable icp_source_password {
+variable "icp_source_password" {
   default = ""
 }
 
-variable icp_source_path {
+variable "icp_source_path" {
   default = ""
 }
 
@@ -93,7 +93,7 @@ variable "instance_prefix" {
   default = "icp"
 }
 
-variable install_gluster {
+variable "install_gluster" {
   default = false
 }
 

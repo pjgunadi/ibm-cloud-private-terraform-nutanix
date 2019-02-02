@@ -19,7 +19,7 @@ ubuntu_install(){
     sudo -E apt-get -y update
     sudo -E apt-get -yq -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade
     #sudo apt-get -y upgrade
-    sudo apt-get install -y python python-pip socat unzip moreutils nfs-common
+    sudo apt-get install -y python python-pip socat unzip moreutils
 
     sudo service iptables stop
     sudo ufw disable
