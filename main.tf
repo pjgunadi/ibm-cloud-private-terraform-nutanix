@@ -804,7 +804,8 @@ module "icpprovision" {
   icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",nutanix_virtual_machine.va.*.nic_list.0.ip_endpoint_list))}"]
 
   # Workaround for terraform issue #10857
-  cluster_size    = "${var.master["nodes"]}"
+  cluster_size    = "${var.nfs["nodes"]}"
+  master_size     = "${var.master["nodes"]}"
   worker_size     = "${var.worker["nodes"]}"
   proxy_size      = "${var.proxy["nodes"]}"
   management_size = "${var.management["nodes"]}"
