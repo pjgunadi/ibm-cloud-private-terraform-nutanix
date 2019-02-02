@@ -235,10 +235,6 @@ resource "nutanix_virtual_machine" "master" {
     },
     {
       disk_size_mib = "${local.master_datadisk * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -324,10 +320,6 @@ resource "nutanix_virtual_machine" "proxy" {
     },
     {
       disk_size_mib = "${local.proxy_datadisk * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -374,7 +366,7 @@ resource "nutanix_virtual_machine" "proxy" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/lib/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
+    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/scripts/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
   }
 
   provisioner "local-exec" {
@@ -422,10 +414,6 @@ resource "nutanix_virtual_machine" "management" {
     },
     {
       disk_size_mib = "${local.management_datadisk * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -472,7 +460,7 @@ resource "nutanix_virtual_machine" "management" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/lib/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
+    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/scripts/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
   }
 
   provisioner "local-exec" {
@@ -520,10 +508,6 @@ resource "nutanix_virtual_machine" "va" {
     },
     {
       disk_size_mib = "${local.va_datadisk * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -570,7 +554,7 @@ resource "nutanix_virtual_machine" "va" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/lib/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
+    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/scripts/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
   }
 
   provisioner "local-exec" {
@@ -618,10 +602,6 @@ resource "nutanix_virtual_machine" "worker" {
     },
     {
       disk_size_mib = "${local.worker_datadisk * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -668,7 +648,7 @@ resource "nutanix_virtual_machine" "worker" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/lib/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
+    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/scripts/destroy/delete_node.sh ${var.ssh_user}@${local.icp_boot_node_ip}:/tmp/"
   }
 
   provisioner "local-exec" {
@@ -716,10 +696,6 @@ resource "nutanix_virtual_machine" "gluster" {
     },
     {
       disk_size_mib = "${var.gluster["data_disk"] * 1024 }"
-      data_source_reference = {
-        kind = "image"
-        uuid = "${var.nutanix_image_uuid}"
-      }
     },
   ]
 
@@ -755,7 +731,7 @@ resource "nutanix_virtual_machine" "gluster" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/lib/destroy/delete_gluster.sh ${var.ssh_user}@${local.heketi_ip}:/tmp/"
+    command = "scp -i ${var.vm_private_key_file} ${local.ssh_options} ${path.module}/scripts/destroy/delete_gluster.sh ${var.ssh_user}@${local.heketi_ip}:/tmp/"
   }
 
   provisioner "local-exec" {
@@ -773,7 +749,7 @@ resource "null_resource" "copy_delete_node" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/lib/destroy/delete_node.sh"
+    source      = "${path.module}/scripts/destroy/delete_node.sh"
     destination = "/tmp/delete_node.sh"
   }
 }
@@ -786,7 +762,7 @@ resource "null_resource" "copy_delete_gluster" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/lib/destroy/delete_gluster.sh"
+    source      = "${path.module}/scripts/destroy/delete_gluster.sh"
     destination = "/tmp/delete_gluster.sh"
   }
 }
