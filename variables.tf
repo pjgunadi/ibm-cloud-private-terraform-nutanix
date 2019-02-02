@@ -196,7 +196,7 @@ variable "va" {
     os_disk       = "100"
     kubelet_lv    = "10"
     docker_lv     = "40"
-    management_lv = "50"
+    va_lv         = "50"
     memory        = "8192"
     # ipaddresses   = "192.168.1.88"
     # netmask       = "24"

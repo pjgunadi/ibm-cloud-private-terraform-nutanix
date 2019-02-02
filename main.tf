@@ -27,7 +27,7 @@ locals {
   master_datadisk     = "${var.master["kubelet_lv"] + var.master["docker_lv"] + var.master["registry_lv"] + var.master["etcd_lv"] + var.master["management_lv"] + 1}"
   proxy_datadisk      = "${var.proxy["kubelet_lv"] + var.proxy["docker_lv"] + 1}"
   management_datadisk = "${var.management["kubelet_lv"] + var.management["docker_lv"] + var.management["management_lv"] + 1}"
-  va_datadisk = "${var.va["kubelet_lv"] + var.va["docker_lv"] + var.va["management_lv"] + 1}"
+  va_datadisk = "${var.va["kubelet_lv"] + var.va["docker_lv"] + var.va["va_lv"] + 1}"
   worker_datadisk     = "${var.worker["kubelet_lv"] + var.worker["docker_lv"] + 1}"
 
   #Destroy nodes variables
