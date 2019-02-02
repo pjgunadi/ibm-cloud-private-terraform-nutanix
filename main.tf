@@ -123,7 +123,7 @@ resource "nutanix_virtual_machine" "nfs" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.nfs["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.nfs["cpu_sockets"]}"
   num_sockets          = "${var.nfs["cpu_cores"]}"
-  memory_size_mib      = "${var.nfs["memory"] * 1024}"
+  memory_size_mib      = "${var.nfs["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
@@ -205,7 +205,7 @@ resource "nutanix_virtual_machine" "master" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.master["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.master["cpu_sockets"]}"
   num_sockets          = "${var.master["cpu_cores"]}"
-  memory_size_mib      = "${var.master["memory"] * 1024}"
+  memory_size_mib      = "${var.master["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
 
@@ -295,7 +295,7 @@ resource "nutanix_virtual_machine" "proxy" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.proxy["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.proxy["cpu_sockets"]}"
   num_sockets          = "${var.proxy["cpu_cores"]}"
-  memory_size_mib      = "${var.proxy["memory"] * 1024}"
+  memory_size_mib      = "${var.proxy["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
@@ -393,7 +393,7 @@ resource "nutanix_virtual_machine" "management" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.management["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.management["cpu_sockets"]}"
   num_sockets          = "${var.management["cpu_cores"]}"
-  memory_size_mib      = "${var.management["memory"] * 1024}"
+  memory_size_mib      = "${var.management["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
@@ -491,7 +491,7 @@ resource "nutanix_virtual_machine" "va" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.va["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.va["cpu_sockets"]}"
   num_sockets          = "${var.va["cpu_cores"]}"
-  memory_size_mib      = "${var.va["memory"] * 1024}"
+  memory_size_mib      = "${var.va["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
@@ -589,7 +589,7 @@ resource "nutanix_virtual_machine" "worker" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.worker["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.worker["cpu_sockets"]}"
   num_sockets          = "${var.worker["cpu_cores"]}"
-  memory_size_mib      = "${var.worker["memory"] * 1024}"
+  memory_size_mib      = "${var.worker["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
@@ -687,7 +687,7 @@ resource "nutanix_virtual_machine" "gluster" {
   name = "${format("%s-%s-%s-%01d", lower(var.instance_prefix), random_id.rand.hex, lower(var.gluster["name"]),count.index + 1) }"
   num_vcpus_per_socket = "${var.gluster["cpu_sockets"]}"
   num_sockets          = "${var.gluster["cpu_cores"]}"
-  memory_size_mib      = "${var.gluster["memory"] * 1024}"
+  memory_size_mib      = "${var.gluster["memory"]}"
   hardware_clock_timezone = "${var.timezone}"
 
   cluster_reference = {
