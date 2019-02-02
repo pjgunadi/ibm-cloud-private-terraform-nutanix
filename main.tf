@@ -851,8 +851,8 @@ module "icpprovision" {
   gluster_ips         = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list}"] #Connecting IP
   gluster_svc_ips     = ["${nutanix_virtual_machine.gluster.*.nic_list.0.ip_endpoint_list}"] #Service IP
   device_name         = "/dev/sdb"                                                  #update according to the device name provided by cloud provider
-  heketi_ip           = "${nutanix_virtual_machine.gluster.0.ip_endpoint_list.0.ip}"   #Connectiong IP
-  heketi_svc_ip       = "${nutanix_virtual_machine.gluster.0.ip_endpoint_list.0.ip}"   #Service IP
+  heketi_ip           = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Connectiong IP
+  heketi_svc_ip       = "${nutanix_virtual_machine.gluster.0.nic_list.0.ip_endpoint_list.0.ip}"   #Service IP
   cluster_name        = "${var.cluster_name}.icp"
   gluster_volume_type = "${var.gluster_volume_type}"
   heketi_admin_pwd    = "${var.heketi_admin_pwd}"
