@@ -93,6 +93,7 @@ data "template_file" "user_data" {
 
    vars {
      password = "${var.ssh_password}"
+     timezone = "${var.timezone}"
    }
 }
 
