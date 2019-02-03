@@ -46,6 +46,7 @@ data "template_file" "createfs_master" {
     etcd_lv       = "${var.master["etcd_lv"]}"
     registry_lv   = "${var.master["registry_lv"]}"
     management_lv = "${var.master["management_lv"]}"
+    master_count  = "${var.master["nodes"]}"
   }
 }
 
@@ -99,7 +100,7 @@ data "template_file" "bootstrap_shared_storage" {
   template = "${file("${path.module}/scripts/bootstrap_shared_storage.tpl")}"
 
   vars {
-    icp_num_masters = "${var.master["nodes"]}"
+    master_count = "${var.master["nodes"]}"
   }
 }
 
@@ -107,8 +108,8 @@ data "template_file" "mount_nfs" {
   template = "${file("${path.module}/scripts/mount_nfs.tpl")}"
 
   vars {
-    nfs_ip          = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
-    icp_num_masters = "${var.master["nodes"]}"
+    nfs_ip       = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
+    master_count = "${var.master["nodes"]}"
   }
 }
 
@@ -188,7 +189,7 @@ resource "nutanix_virtual_machine" "nfs" {
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
-      "chmod +x /tmp/bootstrap_shared_storage.sh; sudo /tmp/bootstrap_shared_storage.sh",
+      "chmod +x /tmp/bootstrap_shared_storage.sh; /tmp/bootstrap_shared_storage.sh",
       "chmod +x /tmp/create_nfs.sh; /tmp/create_nfs.sh",
       "chmod +x /tmp/disable_ssh_password.sh; sudo /tmp/disable_ssh_password.sh",
     ]
@@ -275,7 +276,7 @@ resource "nutanix_virtual_machine" "master" {
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
       "chmod +x /tmp/createfs.sh; sudo /tmp/createfs.sh",
-      "chmod +x /tmp/mount_nfs.sh; sudo /tmp/mount_nfs.sh",
+      "chmod +x /tmp/mount_nfs.sh; /tmp/mount_nfs.sh",
       "chmod +x /tmp/disable_ssh_password.sh; sudo /tmp/disable_ssh_password.sh",
     ]
   }
