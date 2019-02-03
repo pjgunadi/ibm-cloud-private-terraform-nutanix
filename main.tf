@@ -371,7 +371,7 @@ resource "nutanix_virtual_machine" "proxy" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.default_ip_address} proxy\"; echo done"
+    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.nic_list.0.ip_endpoint_list.0.ip} proxy\"; echo done"
   }
 }
 
@@ -465,7 +465,7 @@ resource "nutanix_virtual_machine" "management" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.default_ip_address} management\"; echo done"
+    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.nic_list.0.ip_endpoint_list.0.ip} management\"; echo done"
   }
 }
 
@@ -559,7 +559,7 @@ resource "nutanix_virtual_machine" "va" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.default_ip_address} va\"; echo done"
+    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.nic_list.0.ip_endpoint_list.0.ip} va\"; echo done"
   }
 }
 
@@ -653,7 +653,7 @@ resource "nutanix_virtual_machine" "worker" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.default_ip_address} worker\"; echo done"
+    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.icp_boot_node_ip} \"chmod +x /tmp/delete_node.sh; /tmp/delete_node.sh ${var.icp_version} ${self.nic_list.0.ip_endpoint_list.0.ip} worker\"; echo done"
   }
 }
 
@@ -736,7 +736,7 @@ resource "nutanix_virtual_machine" "gluster" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.heketi_ip} \"chmod +x /tmp/delete_gluster.sh; /tmp/delete_gluster.sh ${self.default_ip_address}\"; echo done"
+    command = "ssh -i ${var.vm_private_key_file} ${local.ssh_options} ${var.ssh_user}@${local.heketi_ip} \"chmod +x /tmp/delete_gluster.sh; /tmp/delete_gluster.sh ${self.nic_list.0.ip_endpoint_list.0.ip}\"; echo done"
   }
 }
 
