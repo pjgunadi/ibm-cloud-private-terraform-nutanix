@@ -88,15 +88,6 @@ data "template_file" "createfs_worker" {
   }
 }
 
-data "template_file" "user_data" {
-   template = "${file("${path.module}/scripts/user_data.tpl")}"
-
-   vars {
-     password = "${var.ssh_password}"
-     timezone = "${var.timezone}"
-   }
-}
-
 data "template_file" "bootstrap_shared_storage" {
   template = "${file("${path.module}/scripts/bootstrap_shared_storage.tpl")}"
 
@@ -111,6 +102,86 @@ data "template_file" "mount_nfs" {
   vars {
     nfs_ip       = "${nutanix_virtual_machine.nfs.0.nic_list.0.ip_endpoint_list.0.ip}"
     master_count = "${var.master["nodes"]}"
+  }
+}
+
+# data "template_file" "user_data" {
+#    template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+#    vars {
+#      password = "${var.ssh_password}"
+#      timezone = "${var.timezone}"
+#    }
+# }
+
+data "template_file" "nfs_user_data" {
+  count = "${var.nfs["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.nfs["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "master_user_data" {
+  count = "${var.master["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.master["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "proxy_user_data" {
+  count = "${var.proxy["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.proxy["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "management_user_data" {
+  count = "${var.management["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.management["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "va_user_data" {
+  count = "${var.va["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.va["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "worker_user_data" {
+  count = "${var.worker["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.worker["name"]),count.index + 1) }"
+  }
+}
+data "template_file" "gluster_user_data" {
+  count = "${var.gluster["nodes"]}"
+  template = "${file("${path.module}/scripts/user_data.tpl")}"
+
+  vars {
+    password = "${var.ssh_password}"
+    timezone = "${var.timezone}"
+    vmname = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.gluster["name"]),count.index + 1) }"
   }
 }
 
@@ -133,7 +204,7 @@ resource "nutanix_virtual_machine" "nfs" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.nfs_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -185,7 +256,7 @@ resource "nutanix_virtual_machine" "nfs" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -216,7 +287,7 @@ resource "nutanix_virtual_machine" "master" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.master_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -271,7 +342,7 @@ resource "nutanix_virtual_machine" "master" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -301,7 +372,7 @@ resource "nutanix_virtual_machine" "proxy" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.proxy_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -346,7 +417,7 @@ resource "nutanix_virtual_machine" "proxy" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -395,7 +466,7 @@ resource "nutanix_virtual_machine" "management" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.management_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -440,7 +511,7 @@ resource "nutanix_virtual_machine" "management" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -489,7 +560,7 @@ resource "nutanix_virtual_machine" "va" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.va_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -534,7 +605,7 @@ resource "nutanix_virtual_machine" "va" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -583,7 +654,7 @@ resource "nutanix_virtual_machine" "worker" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.worker_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -628,7 +699,7 @@ resource "nutanix_virtual_machine" "worker" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
@@ -677,7 +748,7 @@ resource "nutanix_virtual_machine" "gluster" {
     uuid = "${var.nutanix_cluster_uuid}"
   }
 
-  guest_customization_cloud_init_user_data = "${base64encode(data.template_file.user_data.rendered)}"
+  guest_customization_cloud_init_user_data = "${base64encode(element(data.template_file.gluster_user_data.*.rendered, count.index))}"
 
   nic_list = [
     {
@@ -712,7 +783,7 @@ resource "nutanix_virtual_machine" "gluster" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
-      "sudo hostnamectl set-hostname ${self.name}",
+      # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
