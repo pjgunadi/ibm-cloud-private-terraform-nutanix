@@ -37,7 +37,7 @@ kubectl="sudo docker run -e LICENSE=accept --net=host -v $ICPDIR:/installer/clus
   
 $kubectl config set-cluster cfc-cluster --server=https://localhost:8001 --insecure-skip-tls-verify=true 
 $kubectl config set-context kubectl --cluster=cfc-cluster 
-$kubectl config set-credentials user --client-certificate=/installer/cluster/cfc-certs/kubecfg.crt --client-key=/installer/cluster/cfc-certs/kubecfg.key 
+$kubectl config set-credentials user --client-certificate=/installer/cluster/cfc-certs/kubernetes/kubecfg.crt --client-key=/installer/cluster/cfc-certs/kubernetes/kubecfg.key 
 $kubectl config set-context kubectl --user=user 
 $kubectl config use-context kubectl
 #$kubectl drain $ip --grace-period=300
