@@ -6,9 +6,9 @@ provider "nutanix" {
   insecure = true
 }
 
-# resource "random_id" "rand" {
-#   byte_length = 2
-# }
+resource "random_id" "rand" {
+  byte_length = 2
+}
 
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
@@ -258,9 +258,12 @@ resource "nutanix_virtual_machine" "nfs" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
+      "[ ! -d /opt/ibm/cluster/images ] && sudo mkdir -p /opt/ibm/cluster/images sudo chown -R ${var.ssh_user} /opt/ibm/cluster",
+      "[ -f ${var.icp_source_path} ] && mv ${var.icp_source_path} /opt/ibm/cluster/images/",
       "chmod +x /tmp/bootstrap_shared_storage.sh; /tmp/bootstrap_shared_storage.sh",
       "chmod +x /tmp/create_nfs.sh; /tmp/create_nfs.sh",
       "chmod +x /tmp/disable_ssh_password.sh; sudo /tmp/disable_ssh_password.sh",
@@ -344,6 +347,7 @@ resource "nutanix_virtual_machine" "master" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
@@ -419,6 +423,7 @@ resource "nutanix_virtual_machine" "proxy" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
@@ -513,6 +518,7 @@ resource "nutanix_virtual_machine" "management" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
@@ -607,6 +613,7 @@ resource "nutanix_virtual_machine" "va" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
@@ -701,6 +708,7 @@ resource "nutanix_virtual_machine" "worker" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
@@ -785,6 +793,7 @@ resource "nutanix_virtual_machine" "gluster" {
       "echo \"${var.ssh_user} ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/${var.ssh_user}",
       # "sudo hostnamectl set-hostname ${self.name}",
       "sudo sed -i /^127.0.1.1.*$/d /etc/hosts",
+      "echo $(ip addr | grep \"inet \" | grep -v 127.0.0.1 | awk -F\" \" 'NR==1 {print $2}' | cut -d / -f 1) ${self.name} | sudo tee -a /etc/hosts",
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "sudo mkdir /root/.ssh && sudo chmod 700 /root/.ssh",
