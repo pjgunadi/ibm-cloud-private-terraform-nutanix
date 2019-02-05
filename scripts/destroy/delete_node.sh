@@ -1,6 +1,6 @@
 #!/bin/bash
 DefaultOrg="ibmcom"
-DefaultRepo="icp-inception"
+DefaultRepo="icp-inception-amd64"
 ip=$2
 
 #Node Type List
