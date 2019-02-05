@@ -7,7 +7,7 @@
 
 #HOSTNAME=$1
 
-LOGFILE=/tmp/nfsserver.log
+LOGFILE=/tmp/nfsprereq.log
 exec 3>&1
 exec > >(tee -a ${LOGFILE} >/dev/null) 2> >(tee -a ${LOGFILE} >&3)
 
@@ -120,10 +120,6 @@ if [ "$OSLEVEL" == "ubuntu" ]; then
 else
   crlinux_install
 fi
-
-# Start NFS server
-sudo systemctl enable nfs-server
-sudo systemctl start nfs-server
 
 echo "Complete.."
 exit 0

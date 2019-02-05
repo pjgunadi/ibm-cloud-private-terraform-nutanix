@@ -3,6 +3,10 @@
 sudo mkdir -p /export/icpshared
 
 if [ ${master_count} -gt 1 ]; then
+    # Start NFS server
+    sudo systemctl enable nfs-server
+    sudo systemctl start nfs-server
+
     sudo mkdir -p /export/icpshared/var/lib/registry
     sudo mkdir -p /export/icpshared/var/lib/icp/audit
     sudo mkdir -p /export/icpshared/var/log/audit

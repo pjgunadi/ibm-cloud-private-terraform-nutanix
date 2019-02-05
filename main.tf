@@ -341,6 +341,11 @@ resource "nutanix_virtual_machine" "master" {
     destination = "/tmp/"
   }
 
+  provisioner "file" {
+    source      = "${path.module}/scripts/create_nfs.sh"
+    destination = "/tmp/create_nfs.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "echo ${var.ssh_password} | sudo -S echo",
@@ -352,6 +357,7 @@ resource "nutanix_virtual_machine" "master" {
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
       "chmod +x /tmp/createfs.sh; sudo /tmp/createfs.sh",
+      "chmod +x /tmp/create_nfs.sh; /tmp/create_nfs.sh",
       "chmod +x /tmp/mount_nfs.sh; /tmp/mount_nfs.sh",
       "chmod +x /tmp/disable_ssh_password.sh; sudo /tmp/disable_ssh_password.sh",
     ]
