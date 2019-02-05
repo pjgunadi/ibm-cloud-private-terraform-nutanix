@@ -262,7 +262,7 @@ resource "nutanix_virtual_machine" "nfs" {
       "[ ! -d $HOME/.ssh ] && mkdir $HOME/.ssh && chmod 700 $HOME/.ssh",
       "echo \"${tls_private_key.ssh.public_key_openssh}\" | tee -a $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys",
       "[ -f ~/id_rsa ] && mv ~/id_rsa $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa",
-      "[ ! -d /opt/ibm/cluster/images ] && sudo mkdir -p /opt/ibm/cluster/images sudo chown -R ${var.ssh_user} /opt/ibm/cluster",
+      "[ ! -d /opt/ibm/cluster/images ] && sudo mkdir -p /opt/ibm/cluster/images && sudo chown -R ${var.ssh_user} /opt/ibm/cluster",
       "[ -f ${var.icp_source_path} ] && mv ${var.icp_source_path} /opt/ibm/cluster/images/",
       "chmod +x /tmp/bootstrap_shared_storage.sh; /tmp/bootstrap_shared_storage.sh",
       "chmod +x /tmp/create_nfs.sh; /tmp/create_nfs.sh",
