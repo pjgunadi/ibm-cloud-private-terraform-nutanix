@@ -11,6 +11,6 @@ if [ ${master_count} -gt 1 ]; then
 /export/icpshared/var/lib/icp/audit *(rw,sync,insecure,no_root_squash,no_subtree_check,nohide)
 /export/icpshared/var/log/audit *(rw,sync,insecure,no_root_squash,no_subtree_check,nohide)
 EOF
-    sudo /usr/sbin/exportfs -a
+    sudo /usr/sbin/exportfs -ra
 fi
 
