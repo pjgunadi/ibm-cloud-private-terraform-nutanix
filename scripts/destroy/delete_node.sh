@@ -17,6 +17,8 @@ fi
 
 NODELIST=${ICPDIR}/${NODETYPE}list.txt
 
+MASTERNODES=($(cat ${ICPDIR}/masterlist.txt | tr "," " "))
+
 # Populates globals $org $repo $tag
 function parse_icpversion() {
 
@@ -41,17 +43,18 @@ function parse_icpversion() {
 
 parse_icpversion $1
 
-kubectl="sudo docker run -e LICENSE=accept --net=host -v $ICPDIR:/installer/cluster -v /root:/root $org/$repo:$tag kubectl"
-  
-$kubectl config set-cluster cfc-cluster --server=https://localhost:8001 --insecure-skip-tls-verify=true 
-$kubectl config set-context kubectl --cluster=cfc-cluster 
-$kubectl config set-credentials user --client-certificate=/installer/cluster/cfc-certs/kubernetes/kubecfg.crt --client-key=/installer/cluster/cfc-certs/kubernetes/kubecfg.key 
-$kubectl config set-context kubectl --user=user 
-$kubectl config use-context kubectl
+#kubectl="sudo docker run -e LICENSE=accept --net=host -v $ICPDIR:/installer/cluster -v /root:/root $org/$repo:$tag kubectl"
+which kubectl || docker run --rm -e LICENSE=accept -v /usr/local/bin:/hostbin $org/$repo:$tag cp /usr/local/bin/kubectl /hostbin/
+
+sudo kubectl config set-cluster cfc-cluster --server=https://${MASTERNODES[0]}:8001 --insecure-skip-tls-verify=true 
+sudo kubectl config set-context kubectl --cluster=cfc-cluster 
+sudo kubectl config set-credentials user --client-certificate=$ICPDIR/cfc-certs/kubernetes/kubecfg.crt --client-key=$ICPDIR/cfc-certs/kubernetes/kubecfg.key 
+sudo kubectl config set-context kubectl --user=user 
+sudo kubectl config use-context kubectl
 #$kubectl drain $ip --grace-period=300
-$kubectl drain $ip --force
+sudo kubectl drain $ip --force
 docker run -e LICENSE=accept --net=host -v "$ICPDIR":/installer/cluster $org/$repo:$tag uninstall -l $ip
-$kubectl delete node $ip
+sudo kubectl delete node $ip
 sudo sed -i "/^$ip.*$/d" /etc/hosts
 sudo sed -i "/^$ip.*$/d" /opt/ibm/cluster/hosts
 sed -i-$(date +%Y%m%dT%H%M%S) "s/$ip//;s/,*$//;s/,,/,/;s/^,//" $NODELIST

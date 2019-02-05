@@ -32,6 +32,10 @@ management_services = {             #Default Disabled management component v3.1.
   storage-glusterfs = "disabled"
   storage-minio = "disabled"
 }
+icp_installer_image = {                         #ICP Image and Version
+    name = "ibmcom/icp-inception-amd64"
+    tag = "3.1.1-ee"
+}
 master= {                                       #VM Specification for ICP Master node
     nodes       = "1"
     name        = "master"

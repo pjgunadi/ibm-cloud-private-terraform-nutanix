@@ -39,6 +39,14 @@ variable "vm_private_key_file" {
 }
 
 ##### ICP Instance details ######
+variable "icp_installer_image" {
+  description = "ICP Installer Image Name"
+  type = "map"
+  default = {
+    name = "ibmcom/icp-inception-amd64"
+    tag = "3.1.1-ee"
+  }
+}
 variable "icp_version" {
   description = "ICP Version"
   default     = "3.1.1"

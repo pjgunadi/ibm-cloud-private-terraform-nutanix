@@ -910,7 +910,9 @@ module "icpprovision" {
   icp_source_password = "${var.icp_source_password}"
   image_file          = "${var.icp_source_path}"
 
-  icp-version = "${var.icp_version}"
+  #icp-version = "${var.icp_version}"
+  icp_installer_image = "${var.icp_installer_image["name"]}"
+  icp-version = "${var.icp_installer_image["tag"]}"
 
   icp_configuration = {
     "cluster_name"                 = "${var.cluster_name}"
