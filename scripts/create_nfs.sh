@@ -84,8 +84,8 @@ python python-pip socat unzip moreutils nfs-kernel-server sshpass"
 
   sudo service iptables stop
   sudo ufw disable
-  sudo pip install --upgrade pip
-  sudo pip install pyyaml paramiko
+  sudo -H pip install --upgrade pip
+  sudo -H pip install pyyaml paramiko
 }
 
 crlinux_install(){
@@ -111,7 +111,7 @@ python-setuptools policycoreutils-python socat unzip nfs-utils yum-utils sshpass
   sudo systemctl stop firewalld
 
   sudo easy_install pip
-  sudo pip install pyyaml paramiko
+  sudo -H pip install pyyaml paramiko
 }
 
 if [ "$OSLEVEL" == "ubuntu" ]; then
