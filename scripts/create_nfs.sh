@@ -31,7 +31,7 @@ ubuntu_install(){
   packages_to_check="\
 python-yaml thin-provisioning-tools lvm2 \
 apt-transport-https nfs-common ca-certificates curl software-properties-common \
-python python-pip socat unzip moreutils nfs-kernel-server"
+python python-pip socat unzip moreutils nfs-kernel-server sshpass"
   sudo sysctl -w vm.max_map_count=262144
   packages_to_install=""
 
@@ -91,7 +91,7 @@ python python-pip socat unzip moreutils nfs-kernel-server"
 crlinux_install(){
   packages_to_check="\
 PyYAML device-mapper libseccomp libtool-ltdl libcgroup iptables device-mapper-persistent-data lvm2 \
-python-setuptools policycoreutils-python socat unzip nfs-utils yum-utils"
+python-setuptools policycoreutils-python socat unzip nfs-utils yum-utils sshpass"
 
   for package in ${packages_to_check}; do
     if ! rpm -q ${package} &> /dev/null; then
