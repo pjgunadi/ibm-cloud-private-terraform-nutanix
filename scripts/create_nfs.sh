@@ -27,7 +27,6 @@ ubuntu_install(){
   sudo dpkg --configure -a
   sudo apt-get clean
   sudo apt-get install -f
-  sudo apt-get update
 
   packages_to_check="\
 python-yaml thin-provisioning-tools lvm2 \

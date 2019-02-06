@@ -924,6 +924,7 @@ module "icpprovision" {
   icp_source_user     = "${var.icp_source_user}"
   icp_source_password = "${var.icp_source_password}"
   image_file          = "${var.icp_source_path}"
+  docker_installer    = "${var.icp_docker_path}"
 
   #icp-version = "${var.icp_version}"
   icp_installer_image = "${var.icp_installer_image["name"]}"

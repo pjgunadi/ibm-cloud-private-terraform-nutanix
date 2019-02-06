@@ -68,6 +68,10 @@ variable "icp_source_path" {
   default = ""
 }
 
+variable "icp_docker_path" {
+  default = ""
+}
+
 variable "icpadmin_password" {
   description = "ICP admin password"
   default     = "admin"
