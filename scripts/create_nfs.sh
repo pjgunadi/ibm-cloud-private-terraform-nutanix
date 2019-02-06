@@ -22,11 +22,11 @@ echo "Operating System is $OSLEVEL"
 
 ubuntu_install(){
 
-  sudo rm /var/cache/apt/archives/lock
-  sudo rm  /var/lib/apt/lists/lock
-  sudo dpkg --configure -a
-  sudo apt-get clean
-  sudo apt-get install -f
+  # sudo rm /var/cache/apt/archives/lock
+  # sudo rm  /var/lib/apt/lists/lock
+  # sudo dpkg --configure -a
+  # sudo apt-get clean
+  # sudo apt-get install -f
 
   packages_to_check="\
 python-yaml thin-provisioning-tools lvm2 \
