@@ -1,0 +1,44 @@
+{
+    "name": "ICP deployment in Nutanix",
+    "description": "IBM Cloud Private Deployment in Nutanix",
+    "version": "3.1.1",
+    "imageUrl": "",
+    "image": "",
+    "type": "prebuilt",
+    "status": "active",
+    "manifest": {
+      "template_type": "Terraform",
+      "template_format": "HCL",
+      "template_provider": "Nutanix",
+      "template": {
+        "templateData": "",
+        "templateVariables": "",
+        "templateOutput": ""
+      },
+      "template_source": {
+        "githubRepoUrl": "",
+        "githubAccessToken": "",
+        "relativePathToTemplateFolder": "cam",
+        "templateFileName": ""
+      }
+    },
+    "metadata": {
+      "displayName": "IBM Cloud Private Deployment in Nutanix",
+      "providerDisplayName": "IBM",
+      "longDescription": "Install IBM ICP in your existing Nutanix Cluster",
+      "bullets": [
+        {
+          "title": "Clouds",
+          "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Nutanix</li></ul>"
+        },
+        {
+          "title": "Template version",
+          "description": "V0.3.1"
+        },
+        {
+          "title": "Operating systems supported",
+          "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>RedHat Enterprise Server 7.4</li><li>Ubuntu 16.04</li></ul>"
+        }
+      ]
+    }
+  }

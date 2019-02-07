@@ -1,0 +1,495 @@
+{
+  "input_datatypes": [],
+  "output_datatype": "content_template_output",
+  "input_groups": [
+    {
+      "name": "provider",
+      "label": "Nutanix Connection"
+    },    
+    {
+      "name": "cloud",
+      "label": "Nutanix Resources"
+    },
+    {
+      "name": "ssh_keys",
+      "label": "SSH Keys"
+    },
+    {
+      "name": "image_parameters",
+      "label": "Image Parameters"
+    },
+    {
+      "name": "icp_parameters",
+      "label": "ICP Parameters"
+    },
+    {
+      "name": "icp_installer",
+      "label": "ICP-ee Installer (Optional)"
+    }
+  ],
+  "output_groups": [
+    {
+      "name": "content_template_output",
+      "label": "Outputs"
+    }
+  ],
+"template_input_params": [
+  {
+    "name": "nutanix_user",
+    "label": "Nutanix User",
+    "description": "Username for Nutanix Prism authentication",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "provider"
+  },   
+  {
+    "name": "nutanix_password",
+    "label": "Nutanix Pasword",
+    "description": "Password for Nutanix Prism authentication",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": true,
+    "type": "string",
+    "group_name": "provider"
+  },     
+  {
+    "name": "nutanix_endpoint",
+    "label": "Nutanix Endpoint IP",
+    "description": "Nutanix Prism Endpoint IP Address",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "provider"
+  },     
+  {
+    "name": "nutanix_port",
+    "label": "Nutanix Endpoint Port",
+    "description": "Nutanix Prism Endpoint Port Number",
+    "default": "9440",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "provider"
+  },     
+  {
+    "name": "nutanix_cluster_uuid",
+    "label": "Nutanix Cluster UUID",
+    "description": "Nutanix Cluster for ICP Deployment",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "cloud"
+  },       
+  {
+    "name": "nutanix_image_uuid",
+    "label": "Nutanix Image UUID",
+    "description": "Nutanix Image for ICP Deployment",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "cloud"
+  },       
+  {
+    "name": "nutanix_network_uuid",
+    "label": "Nutanix Network UUID",
+    "description": "Nutanix Network for ICP Deployment",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "cloud"
+  },         
+  {
+    "name": "ssh_user",
+    "label": "Template Login Username",
+    "description": "User name in selected template",
+    "default": "ubuntu",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "ssh_keys"
+  },
+  {
+    "name": "ssh_password",
+    "label": "Template Password",
+    "description": "Password in selected template",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": true,
+    "type": "string",
+    "group_name": "ssh_keys"
+  },
+  {
+    "name": "vm_private_key_file",
+    "label": "VM Private Key Filename",
+    "description": "VM Private Key filename to be saved on local",
+    "default": "nutanix-key",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "ssh_keys"
+  },  
+  {
+    "name": "timezone",
+    "label": "Time Zone",
+    "description": "Time Zone",
+    "default": "Asia/Singapore",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "image_parameters"
+  },
+  {
+    "name": "icp_source_server",
+    "label": "ICP Source Server",
+    "description": "Installer Source Server",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_installer"
+  },
+  {
+    "name": "icp_source_user",
+    "label": "ICP Source Username",
+    "description": "Installer Source Username",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_installer"
+  },
+  {
+    "name": "icp_source_password",
+    "label": "ICP Source Password",
+    "description": "Installer Source Password",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": true,
+    "type": "string",
+    "group_name": "icp_installer"
+  },
+  {
+    "name": "icp_source_path",
+    "label": "ICP Source Path",
+    "description": "ICP Installer Source Path",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_installer"
+  },
+  {
+    "name": "icp_docker_path",
+    "label": "Docker Source Path",
+    "description": "Docker Installer Source Path",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_installer"
+  },  
+  {
+    "name": "icp_version",
+    "label": "ICP Version",
+    "description": "ICP Version",
+    "default": "3.1.1-ee",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "options": [
+      {
+        "value": "3.1.0-ee",
+        "label": "3.1.0-ee"
+      },
+      {
+        "value": "3.1.0",
+        "label": "3.1.0"
+      },
+      {
+        "value": "3.1.1-ee",
+        "label": "3.1.1-ee"
+      },      {
+          "value": "3.1.1",
+          "label": "3.1.1"
+      }
+    ],
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "icpadmin_password",
+    "label": "ICP admin password",
+    "description": "Password for ICP admin",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": true,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "cluster_vip",
+    "label": "Cluster Virtual IP",
+    "description": "Cluster Virtual IP",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "cluster_vip_iface",
+    "label": "Cluster Virtual IP Interface",
+    "description": "Cluster Virtual IP Interface Name",
+    "default": "ens160",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "proxy_vip",
+    "label": "Proxy Virtual IP",
+    "description": "Proxy Virtual IP",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },  
+  {
+    "name": "proxy_vip_iface",
+    "label": "Proxy Virtual IP Interface",
+    "description": "Proxy Virtual IP Interface Name",
+    "default": "ens160",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "cluster_name",
+    "label": "ICP Cluster Name",
+    "description": "ICP Cluster Name",
+    "default": "mycluster",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "install_gluster",
+    "label": "Install Gluster",
+    "description": "Install Gluster",
+    "default": "true",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "boolean",
+    "group_name": "icp_parameters"
+  },   
+  {
+    "name": "gluster_volume_type",
+    "label": "Gluster Volume Type",
+    "description": "Gluster Volume Type",
+    "default": "none",
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "heketi_admin_pwd",
+    "label": "Heketi Admin Password",
+    "description": "Heketi Admin Password",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": true,
+    "type": "string",
+    "group_name": "icp_parameters"
+  },       
+  {
+    "name": "disable_management",
+    "label": "Disable Management",
+    "description": "Disable Management Service",
+    "default": ["istio", "custom-metrics-adapter"],
+    "hidden": true,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "list",
+    "group_name": "icp_parameters"
+  },
+  {
+    "name": "management_services",
+    "label": "Management Services",
+    "description": "Management Services",
+    "default": {"istio": "disabled", "vulnerability-advisor": "disabled", "storage-glusterfs": "disabled", "storage-minio":"disabled"},
+    "hidden": false,
+    "immutable": false,
+    "required": false,
+    "secured": false,
+    "type": "map",
+    "group_name": "icp_parameters"
+  },  
+  {
+    "name": "kibana_install",
+    "label": "Install Kibana",
+    "description": "Install Kibana Flag",
+    "default": "false",
+    "hidden": true,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "options": [
+      {
+        "value": "false",
+        "label": "False"
+      },
+      {
+          "value": "true",
+          "label": "True"
+      }
+    ],
+    "group_name": "icp_parameters"
+  },      
+  {
+    "name": "instance_prefix",
+    "label": "Hostname Prefix",
+    "description": "Type prefix to hostname",
+    "default": "icp",
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "string",
+    "group_name": "image_parameters"
+  },
+  {
+    "name": "master",
+    "label": "Master Node",
+    "description": "Master Node Informations",
+    "default": {"nodes": "1", "name": "master", "cpu_cores": "4", "cpu_sockets": "2", "os_disk": "100", "kubelet_lv":"10","docker_lv":"100","etcd_lv":"10","registry_lv":"25","management_lv":"100","memory":"16384" },
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "map",
+    "group_name": "image_parameters"
+  },
+  {
+      "name": "proxy",
+      "label": "Proxy Node",
+      "description": "Proxy Node Informations",
+      "default": {"nodes": "1", "name": "proxy", "cpu_cores": "2", "cpu_sockets": "1", "os_disk": "100", "kubelet_lv":"10","docker_lv":"100","memory":"4096" },
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "map",
+      "group_name": "image_parameters"
+  },
+  {
+      "name": "management",
+      "label": "Management Node",
+      "description": "Management Node Informations",
+      "default": {"nodes": "1", "name": "mgmt", "cpu_cores": "4", "cpu_sockets": "2", "os_disk": "100", "kubelet_lv":"10","docker_lv":"100","management_lv":"100","memory":"16384" },
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "map",
+      "group_name": "image_parameters"
+  },
+  {
+    "name": "va",
+    "label": "VA Node",
+    "description": "VA Node Informations",
+    "default": {"nodes": "1", "name": "va", "cpu_cores": "4", "cpu_sockets": "2", "os_disk": "100", "kubelet_lv":"10","docker_lv":"100","va_lv":"100","memory":"16384" },
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "map",
+    "group_name": "image_parameters"
+  },  
+  {
+      "name": "worker",
+      "label": "Worker Node",
+      "description": "Worker Node Informations",
+      "default": {"nodes": "3", "name": "worker", "cpu_cores": "4", "cpu_sockets": "2", "os_disk": "100", "kubelet_lv":"10","docker_lv":"100","memory":"16384" },
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "map",
+      "group_name": "image_parameters"
+  },
+  {
+    "name": "gluster",
+    "label": "Gluster Node",
+    "description": "Gluster Node Informations",
+    "default": {"nodes": "3", "name": "gluster", "cpu_cores": "2", "cpu_sockets": "1", "os_disk": "100", "data_disk":"300","memory":"2048" },
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "map",
+    "group_name": "image_parameters"
+  },
+  {
+    "name": "nfs",
+    "label": "NFS Node",
+    "description": "NFS Node Informations",
+    "default": {"nodes": "1", "name": "nfs", "cpu_cores": "4", "cpu_sockets": "1", "os_disk": "300", "memory":"4096" },
+    "hidden": false,
+    "immutable": false,
+    "required": true,
+    "secured": false,
+    "type": "map",
+    "group_name": "image_parameters"
+  }
+],
+"template_output_params": []
+}
+  
