@@ -187,9 +187,9 @@ data "template_file" "gluster_user_data" {
 
 //NFS
 resource "nutanix_virtual_machine" "nfs" {
-  lifecycle {
-    ignore_changes = ["disk_list.0"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0"]
+  # }
 
   #count = "${var.master["nodes"] > 1 ? 1 : 0}"
   count = "${var.nfs["nodes"]}"
@@ -273,9 +273,9 @@ resource "nutanix_virtual_machine" "nfs" {
 
 //master
 resource "nutanix_virtual_machine" "master" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.master["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.master["name"]),count.index + 1) }"
@@ -366,9 +366,9 @@ resource "nutanix_virtual_machine" "master" {
 
 //proxy
 resource "nutanix_virtual_machine" "proxy" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.proxy["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.proxy["name"]),count.index + 1) }"
@@ -461,9 +461,9 @@ resource "nutanix_virtual_machine" "proxy" {
 
 //management
 resource "nutanix_virtual_machine" "management" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.management["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.management["name"]),count.index + 1) }"
@@ -556,9 +556,9 @@ resource "nutanix_virtual_machine" "management" {
 
 //va
 resource "nutanix_virtual_machine" "va" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.va["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.va["name"]),count.index + 1) }"
@@ -651,9 +651,9 @@ resource "nutanix_virtual_machine" "va" {
 
 //worker
 resource "nutanix_virtual_machine" "worker" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.worker["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.worker["name"]),count.index + 1) }"
@@ -746,9 +746,9 @@ resource "nutanix_virtual_machine" "worker" {
 
 //gluster
 resource "nutanix_virtual_machine" "gluster" {
-  lifecycle {
-    ignore_changes = ["disk_list.0", "disk_list.1"]
-  }
+  # lifecycle {
+  #   ignore_changes = ["disk_list.0", "disk_list.1"]
+  # }
 
   count = "${var.gluster["nodes"]}"
   name = "${format("%s-%s-%01d", lower(var.instance_prefix), lower(var.gluster["name"]),count.index + 1) }"
