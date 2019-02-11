@@ -3,10 +3,6 @@
   "output_datatype": "content_template_output",
   "input_groups": [
     {
-      "name": "provider",
-      "label": "Nutanix Connection"
-    },    
-    {
       "name": "cloud",
       "label": "Nutanix Resources"
     },
@@ -34,51 +30,6 @@
     }
   ],
 "template_input_params": [
-  {
-    "name": "nutanix_user",
-    "label": "Nutanix User",
-    "description": "Username for Nutanix Prism authentication",
-    "hidden": false,
-    "immutable": false,
-    "required": true,
-    "secured": false,
-    "type": "string",
-    "group_name": "provider"
-  },   
-  {
-    "name": "nutanix_password",
-    "label": "Nutanix Pasword",
-    "description": "Password for Nutanix Prism authentication",
-    "hidden": false,
-    "immutable": false,
-    "required": true,
-    "secured": true,
-    "type": "string",
-    "group_name": "provider"
-  },     
-  {
-    "name": "nutanix_endpoint",
-    "label": "Nutanix Endpoint IP",
-    "description": "Nutanix Prism Endpoint IP Address",
-    "hidden": false,
-    "immutable": false,
-    "required": true,
-    "secured": false,
-    "type": "string",
-    "group_name": "provider"
-  },     
-  {
-    "name": "nutanix_port",
-    "label": "Nutanix Endpoint Port",
-    "description": "Nutanix Prism Endpoint Port Number",
-    "default": "9440",
-    "hidden": false,
-    "immutable": false,
-    "required": true,
-    "secured": false,
-    "type": "string",
-    "group_name": "provider"
-  },     
   {
     "name": "nutanix_cluster_uuid",
     "label": "Nutanix Cluster UUID",

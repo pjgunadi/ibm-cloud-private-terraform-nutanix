@@ -1,4 +1,4 @@
-# ICP Deployment in Nutanixwith IBM CAM
+# ICP Deployment in Nutanix with IBM CAM
 
 ## Before you start
 Install your Nutanix environment

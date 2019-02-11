@@ -1,16 +1,16 @@
-variable "nutanix_user" {
-  description = "Nutanix user"
-}
-variable "nutanix_password" {
-  description = "Nutanix password"
-}
-variable "nutanix_endpoint" {
-  description = "Nutanix endpoint"
-}
-variable "nutanix_port" {
-  description = "Nutanix port"
-  default = 9440
-}
+# variable "nutanix_user" {
+#   description = "Nutanix user"
+# }
+# variable "nutanix_password" {
+#   description = "Nutanix password"
+# }
+# variable "nutanix_endpoint" {
+#   description = "Nutanix endpoint"
+# }
+# variable "nutanix_port" {
+#   description = "Nutanix port"
+#   default = 9440
+# }
 variable "nutanix_cluster_uuid" {
   description = "Nutanix Cluster UUID"
 }
