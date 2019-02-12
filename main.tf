@@ -909,7 +909,7 @@ module "icpprovision" {
   icp-worker     = ["${data.template_file.worker_ips.*.rendered}"]
   icp-proxy      = ["${split(",",var.proxy["nodes"] == 0 ? join(",",data.template_file.master_ips.*.rendered) : join(",",data.template_file.proxy_ips.*.rendered))}"]
   icp-management = ["${split(",",var.management["nodes"] == 0 ? "" : join(",",data.template_file.mgmt_ips.*.rendered))}"]
-  icp-va         = ["${split(",",var.va["nodes"] == 0 ? join(",",data.template_file.master_ips.*.rendered) : join(",",data.template_file.va_ips.*.rendered))}"]
+  icp-va         = ["${split(",",var.management_services["vulnerability-advisor"] == "disabled" ? "" : join(",", split(",",var.va["nodes"] == 0 ? join(",",data.template_file.master_ips.*.rendered) : join(",",data.template_file.va_ips.*.rendered))))}"]
   #icp-va         = ["${split(",",var.va["nodes"] == 0 ? "" : join(",",data.template_file.va_ips.*.rendered))}"]
 
   # Workaround for terraform issue #10857
